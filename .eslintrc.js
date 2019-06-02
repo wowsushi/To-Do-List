@@ -19,6 +19,7 @@ module.exports = {
         "react"
     ],
     "rules": {
-        "linebreak-style": 'off'
+        "linebreak-style": 'off',
+        "react/prefer-stateless-function": [0, { "ignorePureComponents": true }]
     }
 };

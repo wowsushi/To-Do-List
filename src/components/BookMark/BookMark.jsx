@@ -5,7 +5,8 @@ class BookMark extends React.Component {
   render() {
     return (
       <Route
-        exact path={this.props.to}
+        exact
+        path={this.props.to}
         children={(props) => {
           let className = 'bookMark';
           { props.match ? className += ' select_bookMark'
