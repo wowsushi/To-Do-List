@@ -3,6 +3,9 @@ import { HashRouter, Route } from 'react-router-dom';
 import { TopBlock } from '../TopBlock';
 import { MyTasks } from '../MyTasks';
 
+import { todoListStore } from '../../store';
+import { addTodoList } from '../../actions';
+
 class Main extends React.Component {
   render() {
     return (
@@ -15,5 +18,8 @@ class Main extends React.Component {
     );
   }
 }
+
+window.store = todoListStore;
+window.addTodoList = addTodoList;
 
 export { Main };
