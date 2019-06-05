@@ -6,16 +6,20 @@ import { addTodoList } from '../../actions';
 class ConnectInputTask extends React.Component {
   constructor(props) {
     super(props);
-    this.state = {
-      id: '',
-      name: '',
-      date: '',
-      time: '',
-      file: '',
-      commit: '',
-      important: '',
-      complete: false,
-    };
+    if (this.props.listData) {
+      this.state = this.props.listData
+    } else {
+      this.state = {
+        id: '',
+        name: '',
+        date: '',
+        time: '',
+        file: '',
+        commit: '',
+        important: '',
+        complete: false,
+      };
+    }
     this.changeState = this.changeState.bind(this);
     this.submitTodo = this.submitTodo.bind(this);
     this.tagImportant = this.tagImportant.bind(this);
@@ -81,10 +85,11 @@ class ConnectInputTask extends React.Component {
           />
           <i
             className={this.state.important === 'Y'
-              ? 'far fa-star fa-lg icon iconImportant' : 'far fa-star fa-lg icon'}
+              ? 'fas fa-star fa-lg icon iconImportant' : 'far fa-star fa-lg icon'}
             onClick={this.tagImportant}
           />
           <i className="fas fa-pen fa-lg icon icon_edit" />
+        </div>
           <InputTasksForm
             closeAdd={this.props.closeAdd}
             stateData={this.state}
@@ -92,7 +97,6 @@ class ConnectInputTask extends React.Component {
             submitTodo={this.submitTodo}
             filebox={this.filebox}
           />
-        </div>
       </div>
     );
   }

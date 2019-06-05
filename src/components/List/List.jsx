@@ -1,4 +1,5 @@
 import React from 'react';
+import { InputTask } from '../InputTask';
 
 class List extends React.Component {
   constructor(props) {
@@ -6,8 +7,12 @@ class List extends React.Component {
     this.state = {
       important: this.props.listData.important,
       complete: this.props.listData.complete,
+      editTasks: null,
     };
     this.changeState = this.changeState.bind(this);
+    this.openEdit = this.openEdit.bind(this);
+    this.closeEdit = this.closeEdit.bind(this);
+    this.list = React.createRef();
   }
 
   changeState(type) {
@@ -28,10 +33,34 @@ class List extends React.Component {
     }
   }
 
+  openEdit() {
+    if (event.target.className.indexOf('fa-star') === -1
+      && event.target.className.indexOf('taskChk') === -1) {
+      this.list.current.style.display = 'none';
+      this.setState({
+        editTasks: (
+          <InputTask
+            listData={this.props.listData}
+            closeAdd={this.closeEdit}
+          />),
+      });
+    }
+  }
+
+  closeEdit() {
+    this.list.current.style.display = '';
+    this.setState({ editTasks: null });
+  }
+
   render() {
     return (
-      <div className="listBlock">
-        <div className={`list ${this.state.important ? ' important' : ''}`}>
+      <div className="listBox">
+
+        <div
+          className={`list${this.state.important ? ' important' : ''}`}
+          onClick={this.openEdit}
+          ref={this.list}
+        >
 
           <input
             type="checkbox"
@@ -68,11 +97,19 @@ class List extends React.Component {
               ? ` ${this.props.listData.date.substring(5).replace('-', '/')}`
               : ''
           }
-            {this.props.listData.commit !== ''
+            {this.props.listData.file !== ''
               ? <i className="fas fa-file icon" />
               : ''
           }
+            {this.props.listData.commit !== ''
+              ? <i className="fas fa-comment-dots icon" />
+              : ''
+          }
           </div>
+        </div>
+
+        <div>
+          {this.state.editTasks}
         </div>
       </div>
     );
