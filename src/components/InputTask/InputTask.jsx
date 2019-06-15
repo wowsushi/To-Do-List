@@ -24,6 +24,13 @@ class ConnectInputTask extends React.Component {
     this.submitTodo = this.submitTodo.bind(this);
     this.tagImportant = this.tagImportant.bind(this);
     this.filebox = React.createRef();
+    this.changeListState = (type) => {
+      if (this.props.changeState) {
+        this.props.changeState(type);
+      } else {
+        console.log('新增狀態所以沒有this.props.changeState');
+      }
+    };
   }
 
   changeState(event) {
@@ -33,6 +40,7 @@ class ConnectInputTask extends React.Component {
       value = value.substring(value.lastIndexOf('\\') + 1);
     } else if (event.target.name === 'complete') {
       value = event.target.checked;
+      this.changeListState('complete')
     }
     this.setState({ [event.target.name]: value });
   }
@@ -43,19 +51,25 @@ class ConnectInputTask extends React.Component {
     } else {
       this.setState({ important: '' });
     }
+    this.changeListState('important');
   }
 
   submitTodo() {
     if (this.state.name === '') {
       alert('代辦事項名稱未輸入!');
     } else {
-      this.props.addTodoList(this.state);
-      alert('成功新增!');
-      this.props.closeAdd();
+      if (this.state.id === '') {
+        this.props.addTodoList(this.state);
+        alert('成功新增!');
+      } else {
+        this.props.editTodoList(this.state);
+        alert('編輯成功!');
+      }
       this.setState({
         id: '', name: '', date: '', time: '', file: '', commit: '', important: '', complete: false,
       });
       this.filebox.current.value = '';
+      this.props.closeAdd();
     }
   }
 
@@ -90,13 +104,13 @@ class ConnectInputTask extends React.Component {
           />
           <i className="fas fa-pen fa-lg icon icon_edit" />
         </div>
-          <InputTasksForm
-            closeAdd={this.props.closeAdd}
-            stateData={this.state}
-            changeState={this.changeState}
-            submitTodo={this.submitTodo}
-            filebox={this.filebox}
-          />
+        <InputTasksForm
+          closeAdd={this.props.closeAdd}
+          stateData={this.state}
+          changeState={this.changeState}
+          submitTodo={this.submitTodo}
+          filebox={this.filebox}
+        />
       </div>
     );
   }

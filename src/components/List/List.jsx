@@ -1,7 +1,9 @@
 import React from 'react';
+import { connect } from 'react-redux';
 import { InputTask } from '../InputTask';
+import { editTodoList } from '../../actions';
 
-class List extends React.Component {
+class ConnectList extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -12,20 +14,22 @@ class List extends React.Component {
     this.changeState = this.changeState.bind(this);
     this.openEdit = this.openEdit.bind(this);
     this.closeEdit = this.closeEdit.bind(this);
+    this.updateTodolist = this.updateTodolist.bind(this)
     this.list = React.createRef();
   }
 
   changeState(type) {
     switch (type) {
       case 'complete': {
-        this.setState({ complete: window.event.target.checked });
+        this.setState({ complete: window.event.target.checked },
+          this.updateTodolist);
         break;
       }
       case 'important': {
         if (this.state.important === '') {
-          this.setState({ important: 'Y' });
+          this.setState({ important: 'Y' }, this.updateTodolist);
         } else {
-          this.setState({ important: '' });
+          this.setState({ important: '' }, this.updateTodolist);
         }
         break;
       }
@@ -42,6 +46,8 @@ class List extends React.Component {
           <InputTask
             listData={this.props.listData}
             closeAdd={this.closeEdit}
+            changeState={this.changeState.bind(this)}
+            editTodoList={this.props.editTodoList}
           />),
       });
     }
@@ -50,6 +56,12 @@ class List extends React.Component {
   closeEdit() {
     this.list.current.style.display = '';
     this.setState({ editTasks: null });
+  }
+
+  updateTodolist() {
+    let updateList = Object.assign({}, this.props.listData)
+    updateList = { ...updateList, complete: this.state.complete, important: this.state.important };
+    this.props.editTodoList(updateList);
   }
 
   render() {
@@ -92,19 +104,19 @@ class List extends React.Component {
             {this.props.listData.date !== ''
               ? <i className="far fa-calendar-alt icon" />
               : ''
-          }
+            }
             {this.props.listData.date !== ''
               ? ` ${this.props.listData.date.substring(5).replace('-', '/')}`
               : ''
-          }
+            }
             {this.props.listData.file !== ''
               ? <i className="fas fa-file icon" />
               : ''
-          }
+            }
             {this.props.listData.commit !== ''
               ? <i className="fas fa-comment-dots icon" />
               : ''
-          }
+            }
           </div>
         </div>
 
@@ -115,5 +127,12 @@ class List extends React.Component {
     );
   }
 }
+
+const mapDispatchToProps = dispatch => ({
+  editTodoList: todoList => dispatch(editTodoList(todoList)),
+});
+
+
+const List = connect(null, mapDispatchToProps)(ConnectList);
 
 export { List };
