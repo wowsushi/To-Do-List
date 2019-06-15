@@ -3,6 +3,8 @@ import { Provider } from 'react-redux';
 import { HashRouter, Route } from 'react-router-dom';
 import { TopBlock } from '../TopBlock';
 import { MyTasks } from '../MyTasks';
+import { InProgress } from '../InProgress';
+import { Completed } from '../Completed';
 
 import { todoListStore } from '../../store';
 import { addTodoList } from '../../actions';
@@ -15,6 +17,8 @@ class Main extends React.Component {
           <div>
             <TopBlock />
             <Route exact path="/" component={MyTasks} />
+            <Route exact path="/inProgress" component={InProgress} />
+            <Route exact path="/completed" component={Completed} />
           </div>
         </HashRouter>
       </Provider>

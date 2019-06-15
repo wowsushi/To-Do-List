@@ -161,3 +161,10 @@ body {
 .important {
   background: #FFF2DC;
 }
+
+.countText {
+  margin: 5px;
+  text-align: left;
+  font-size: 24px;
+  color:#C8C8C8;
+}
